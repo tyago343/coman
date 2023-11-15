@@ -10,9 +10,9 @@ import { ReviewModule } from '../review/review.module';
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     DatabaseModule,
-    UserModule,
     BookModule,
     AuthorModule,
+    UserModule,
     ReviewModule,
   ],
 })

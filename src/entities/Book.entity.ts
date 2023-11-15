@@ -3,6 +3,7 @@ import {
   Entity,
   ManyToMany,
   ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Author } from './Author.entity';
@@ -18,10 +19,11 @@ export class Book {
   @Column({ nullable: false })
   synopsis: string;
   @Column({ nullable: false })
-  publsihedDate: string;
+  publishedDate: string;
   @Column()
   price: number;
-  @ManyToOne(() => Author, (author) => author.books)
+  @OneToOne(() => Author, (author) => author.books)
+  @Column({ default: 'anonymous' })
   author: Author;
   @ManyToMany(() => User, (user) => user.wishlist)
   users: User[];
