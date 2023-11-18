@@ -14,6 +14,7 @@ export class AuthController {
     return { message: 'Google Auth Redirect' };
   }
   @Get('login/google/status')
+  @UseGuards(GooglePassportGuard)
   async googleAuthStatus(@Req() request: any) {
     if (request.user) {
       return { message: 'User is logged in', user: request.user };
