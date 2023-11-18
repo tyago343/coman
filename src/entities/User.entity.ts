@@ -21,7 +21,7 @@ export class User {
   username: string;
   @ManyToMany(() => Book, { cascade: true })
   @JoinTable()
-  wishlist: Book[];
+  wishlist?: Book[];
   @OneToMany(() => Review, (review) => review.user)
-  reviews: Review[];
+  reviews?: Review[];
 }

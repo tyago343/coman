@@ -15,7 +15,6 @@ export class AuthController {
   }
   @Get('login/google/status')
   async googleAuthStatus(@Req() request: any) {
-    console.log(request);
     if (request.user) {
       return { message: 'User is logged in', user: request.user };
     }
