@@ -9,13 +9,13 @@ import {
 import { Book } from './Book.entity';
 import { Review } from './Review.entity';
 
-@Entity()
+@Entity({ name: 'users' })
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
-  @Column({ nullable: false })
+  @Column({ nullable: true })
   name: string;
-  @Column({ nullable: false })
+  @Column({ nullable: true })
   lastname: string;
   @Column({ nullable: false, unique: true })
   username: string;
