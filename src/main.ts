@@ -1,5 +1,5 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './modules/app/app.module';
+import { AppModule } from './app.module';
 import { SwaggerModule } from '@nestjs/swagger';
 import { SwaggerConfig } from './config/Swagger';
 import * as session from 'express-session';

@@ -1,8 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateAuthorDto } from '../../dto/create-author.dto';
 import { UpdateAuthorDto } from '../../dto/update-author.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Author } from '../../entities/Author.entity';
 import { Book } from '../../entities/Book.entity';
 
@@ -26,36 +26,42 @@ export class AuthorService {
   async findOne(id: number) {
     const author = await this.authorRepository.findOne({ where: { id } });
     if (!author) {
-      throw new Error(`Author #${id} not found`);
+      throw new NotFoundException(`Author #${id} not found`);
     }
     return author;
   }
 
   async update(id: number, updateAuthorDto: UpdateAuthorDto) {
-    const books: Book[] = [];
-    const author = await this.authorRepository.findOne({ where: { id } });
+    let books: Book[] = [];
+    const author = await this.authorRepository.findOne({
+      where: { id },
+      relations: { books: true },
+    });
+
     if (!author) {
-      throw new Error(`Author #${id} not found`);
+      throw new NotFoundException(`Author #${id} not found`);
     }
-    books.push(...(author.books || []));
+
     if (updateAuthorDto.books) {
-      for (const bookId of updateAuthorDto.books) {
-        const book = await this.bookRepository.findOne({
-          where: { id: bookId },
-        });
-        if (book) {
-          books.push(book);
-        }
-      }
-      await this.authorRepository.update({ id }, { ...updateAuthorDto, books });
-      return author;
+      const concatedBooks = author.books
+        ? [...updateAuthorDto.books, ...author.books.map((book) => book.id)]
+        : updateAuthorDto.books;
+
+      books = await this.bookRepository.findBy({ id: In(concatedBooks) });
     }
+
+    Object.assign(author, updateAuthorDto);
+
+    author.books = books;
+
+    await this.authorRepository.save(author);
+    return author;
   }
 
   async remove(id: number) {
     const author = await this.authorRepository.findOne({ where: { id } });
     if (!author) {
-      throw new Error(`Author #${id} not found`);
+      throw new NotFoundException(`Author #${id} not found`);
     }
     await this.authorRepository.remove(author);
   }

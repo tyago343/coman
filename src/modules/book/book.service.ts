@@ -33,15 +33,25 @@ export class BookService {
   }
 
   async findAll(): Promise<Book[]> {
-    return await this.bookRepository.find();
+    return await this.bookRepository.find({
+      relations: {
+        author: true,
+      },
+    });
   }
 
   async findOne(id: string): Promise<Book | null> {
-    return await this.bookRepository.findOne({ where: { id } });
+    return await this.bookRepository.findOne({
+      where: { id },
+      relations: { author: true },
+    });
   }
 
   async update(id: string, updateBookDto: UpdateBookDto) {
-    const book = await this.bookRepository.findOne({ where: { id } });
+    const book = await this.bookRepository.findOne({
+      where: { id },
+      relations: { author: true },
+    });
     let author;
     if (!book) {
       throw new NotFoundException('Book not found');
@@ -55,6 +65,7 @@ export class BookService {
       }
     }
     const updatedBook = {
+      ...book,
       ...updateBookDto,
       author,
     };

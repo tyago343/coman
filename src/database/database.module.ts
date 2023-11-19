@@ -18,10 +18,10 @@ import { SeederOptions } from 'typeorm-extension';
           username: configService.get('DATABASE_USERNAME'),
           password: configService.get('DATABASE_PASSWORD'),
           database: configService.get('DATABASE_NAME'),
-          entities: [__dirname + '/../../**/*.entity{.ts,.js}'],
+          entities: [__dirname + '/../**/*.entity{.ts,.js}'],
           synchronize: isDevelopmentEnv,
           logging: isDevelopmentEnv,
-          seeds: [__dirname + '/../../**/*.seeder{.ts,.js}'],
+          seeds: [__dirname + '/../**/*.seeder{.ts,.js}'],
         };
 
         return dbConfig;

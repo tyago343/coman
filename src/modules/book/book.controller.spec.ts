@@ -29,21 +29,22 @@ describe('BookController', () => {
         synopsis: 'This is a new book',
         publishedDate: '2022-01-01',
         price: 19.99,
-        author: {
-          id: 2,
-          name: 'John Doe',
-          placeOfBirth: 'London',
-          dateOfBirth: '1990-01-01',
-        },
+        author: '2',
       };
 
-      jest
-        .spyOn(service, 'create')
-        .mockResolvedValueOnce({ id: 'book-id', ...createBookDto });
+      jest.spyOn(service, 'create').mockResolvedValueOnce({
+        id: 'book-id',
+        ...createBookDto,
+        author: { id: 2, name: 'test', placeOfBirth: '', dateOfBirth: '' },
+      });
 
       const result = await controller.create(createBookDto);
 
-      expect(result).toEqual({ id: 'book-id', ...createBookDto });
+      expect(result).toEqual({
+        id: 'book-id',
+        ...createBookDto,
+        author: { id: 2, name: 'test', placeOfBirth: '', dateOfBirth: '' },
+      });
     });
   });
 
@@ -119,22 +120,20 @@ describe('BookController', () => {
         synopsis: 'This is an updated book',
         price: 14.99,
         publishedDate: '2022-01-01',
-        author: {
-          id: 2,
-          name: 'John Doe',
-          placeOfBirth: 'London',
-          dateOfBirth: '1990-01-01',
-        },
+        author: '2',
       };
       const updatedBook = {
         id: bookId,
         ...updateBookDto,
+        author: { id: 2, name: 'test', placeOfBirth: '', dateOfBirth: '' },
       };
       jest.spyOn(service, 'update').mockResolvedValueOnce(updatedBook as Book);
 
-      const result = await controller.update(bookId, updateBookDto);
+      const result = await controller.update(bookId, {
+        ...updateBookDto,
+      });
 
-      expect(result).toEqual({ id: bookId, ...updateBookDto });
+      expect(result).toEqual({ ...updatedBook });
     });
   });
 

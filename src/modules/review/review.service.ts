@@ -57,6 +57,7 @@ export class ReviewService {
   async update(id: number, updateReviewDto: UpdateReviewDto) {
     let book;
     let user;
+
     if (updateReviewDto.bookId) {
       book = await this.bookRepository.findOne({
         where: {
@@ -67,6 +68,7 @@ export class ReviewService {
         throw new Error('Book not found');
       }
     }
+
     if (updateReviewDto.userId) {
       user = await this.userRepository.findOne({
         where: {
@@ -77,16 +79,21 @@ export class ReviewService {
         throw new Error('User not found');
       }
     }
-    const review = await this.reviewRepository.findOne({ where: { id } });
-    if (!review) {
-      throw new Error('Review not found');
-    }
+
     const updatedReview = {
       ...updateReviewDto,
       user,
       book,
     };
-    return await this.reviewRepository.save(updatedReview);
+
+    await this.reviewRepository.update(id, updatedReview);
+
+    const updatedReviewEntity = await this.reviewRepository.findOne({
+      where: { id },
+      relations: { user: true, book: true },
+    });
+
+    return updatedReviewEntity;
   }
 
   async remove(id: number) {
