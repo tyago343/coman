@@ -27,7 +27,7 @@ export class AuthService {
   }
   async generateJwt(payload: any) {
     try {
-      const token = await this.jwtService.signAsync(payload, {
+      const token = await this.jwtService.sign(payload, {
         secret: process.env.JWT_SECRET,
       });
       return token;
