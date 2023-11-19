@@ -12,5 +12,5 @@ export class Author {
   @Column({ nullable: false })
   dateOfBirth: string;
   @OneToMany(() => Book, (book) => book.author)
-  books: Book[];
+  books?: Book[];
 }

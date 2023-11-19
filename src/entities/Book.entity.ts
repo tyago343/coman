@@ -24,7 +24,7 @@ export class Book {
   @ManyToOne(() => Author, (author) => author.books)
   author: Author;
   @ManyToMany(() => User, (user) => user.wishlist)
-  users: User[];
+  users?: User[];
   @ManyToOne(() => Review, (review) => review.book)
-  reviews: Review[];
+  reviews?: Review[];
 }

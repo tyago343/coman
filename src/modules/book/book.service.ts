@@ -3,7 +3,7 @@ import { CreateBookDto } from '../../dto/create-book.dto';
 import { UpdateBookDto } from '../../dto/update-book.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Book } from '../../entities/Book.entity';
-import { DeleteResult, Repository, UpdateResult } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Author } from '../../entities/Author.entity';
 
 @Injectable()
@@ -40,10 +40,7 @@ export class BookService {
     return await this.bookRepository.findOne({ where: { id } });
   }
 
-  async update(
-    id: string,
-    updateBookDto: UpdateBookDto,
-  ): Promise<UpdateResult> {
+  async update(id: string, updateBookDto: UpdateBookDto) {
     const book = await this.bookRepository.findOne({ where: { id } });
     let author;
     if (!book) {
@@ -62,10 +59,10 @@ export class BookService {
       author,
     };
 
-    return this.bookRepository.update(id, updatedBook);
+    return await this.bookRepository.save(updatedBook);
   }
 
-  async remove(id: string): Promise<DeleteResult> {
-    return await this.bookRepository.delete(id);
+  async remove(id: string) {
+    await this.bookRepository.delete(id);
   }
 }
