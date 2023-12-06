@@ -15,6 +15,12 @@ describe('BookController', () => {
           provide: getRepositoryToken(Author),
           useValue: Repository,
         },
+        {
+          provide: UploadService,
+          useValue: {
+            uploadFile: jest.fn(),
+          },
+        },
       ],
     }).compile();
 
@@ -36,14 +42,28 @@ describe('BookController', () => {
         id: 'book-id',
         ...createBookDto,
         author: { id: 2, name: 'test', placeOfBirth: '', dateOfBirth: '' },
+        frontPage: '',
       });
+      const file: Express.Multer.File = {
+        originalname: 'file.csv',
+        mimetype: 'text/csv',
+        path: 'something',
+        buffer: Buffer.from('one,two,three'),
+        fieldname: '',
+        encoding: '',
+        size: 0,
+        stream: new Readable(),
+        destination: '',
+        filename: '',
+      };
 
-      const result = await controller.create(createBookDto);
+      const result = await controller.create(createBookDto, file);
 
       expect(result).toEqual({
         id: 'book-id',
         ...createBookDto,
         author: { id: 2, name: 'test', placeOfBirth: '', dateOfBirth: '' },
+        frontPage: '',
       });
     });
   });
@@ -57,6 +77,7 @@ describe('BookController', () => {
           synopsis: 'Synopsis 1',
           price: 9.99,
           publishedDate: '2022-01-01',
+          frontPage: '',
           author: {
             id: 1,
             name: 'John Doe',
@@ -70,6 +91,7 @@ describe('BookController', () => {
           synopsis: 'Synopsis 2',
           price: 14.99,
           publishedDate: '2022-01-01',
+          frontPage: '',
           author: {
             id: 1,
             name: 'John Doe',
@@ -96,6 +118,7 @@ describe('BookController', () => {
         synopsis: 'This is a sample book',
         price: 9.99,
         publishedDate: '2022-01-01',
+        frontPage: '',
         author: {
           id: 1,
           name: 'John Doe',
@@ -158,3 +181,5 @@ import { Book } from '../../entities/Book.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Author } from '../../entities/Author.entity';
+import { Readable } from 'typeorm/platform/PlatformTools';
+import { UploadService } from '../upload/upload.service';

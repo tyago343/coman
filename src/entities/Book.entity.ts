@@ -19,8 +19,10 @@ export class Book {
   synopsis: string;
   @Column({ nullable: false })
   publishedDate: string;
-  @Column()
+  @Column({ nullable: true })
   price: number;
+  @Column({ nullable: true })
+  frontPage: string;
   @ManyToOne(() => Author, (author) => author.books)
   author: Author;
   @ManyToMany(() => User, (user) => user.wishlist)

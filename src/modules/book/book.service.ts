@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Book } from '../../entities/Book.entity';
 import { Repository } from 'typeorm';
 import { Author } from '../../entities/Author.entity';
+import { UploadService } from '../upload/upload.service';
 
 @Injectable()
 export class BookService {
@@ -13,9 +14,21 @@ export class BookService {
     private readonly bookRepository: Repository<Book>,
     @InjectRepository(Author)
     private readonly authorRepository: Repository<Author>,
+    private readonly uploadService: UploadService,
   ) {}
-  async create(createBookDto: CreateBookDto) {
+  async create({
+    createBookDto,
+    file,
+  }: {
+    createBookDto: CreateBookDto;
+    file: Express.Multer.File;
+  }) {
     let author;
+    let frontPage;
+    if (file) {
+      const uploadFrontPage = await this.uploadService.uploadFile(file);
+      frontPage = uploadFrontPage.Location;
+    }
     if (createBookDto.author) {
       author = await this.authorRepository.findOne({
         where: { id: +createBookDto.author },
@@ -27,6 +40,7 @@ export class BookService {
     const book = this.bookRepository.create({
       ...createBookDto,
       author,
+      frontPage,
     });
 
     return this.bookRepository.save(book);

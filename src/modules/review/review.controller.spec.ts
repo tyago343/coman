@@ -49,6 +49,7 @@ describe('ReviewController', () => {
           id: '12345678-1234-1234-1234-1234567890ab',
           title: 'test',
           synopsis: 'test',
+          frontPage: 'test',
           price: 1,
           publishedDate: 'new Date()',
           author: {
@@ -88,6 +89,7 @@ describe('ReviewController', () => {
             synopsis: 'test',
             price: 1,
             publishedDate: 'new Date()',
+            frontPage: 'test',
             author: {
               id: 1,
               name: 'test',
@@ -112,6 +114,7 @@ describe('ReviewController', () => {
             title: 'test',
             synopsis: 'test',
             price: 1,
+            frontPage: 'test',
             publishedDate: 'new Date()',
             author: {
               id: 1,
@@ -152,6 +155,7 @@ describe('ReviewController', () => {
           synopsis: 'test',
           price: 1,
           publishedDate: 'new Date()',
+          frontPage: 'test',
           author: {
             id: 1,
             name: 'test',
@@ -194,6 +198,7 @@ describe('ReviewController', () => {
           title: 'test',
           synopsis: 'test',
           price: 1,
+          frontPage: 'test',
           publishedDate: 'new Date()',
           author: {
             id: 1,
@@ -239,6 +244,7 @@ describe('ReviewController', () => {
           synopsis: 'test',
           price: 1,
           publishedDate: 'new Date()',
+          frontPage: 'test',
           author: {
             id: 1,
             name: 'test',
