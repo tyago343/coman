@@ -7,6 +7,7 @@ import { AuthorModule } from './modules/author/author.module';
 import { ReviewModule } from './modules/review/review.module';
 import { PassportModule } from '@nestjs/passport';
 import { AuthModule } from './modules/auth/auth.module';
+import { UploadModule } from './modules/upload/upload.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { AuthModule } from './modules/auth/auth.module';
     PassportModule.register({
       session: true,
     }),
+    UploadModule,
   ],
 })
 export class AppModule {}

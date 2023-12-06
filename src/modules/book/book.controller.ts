@@ -6,12 +6,12 @@ import {
   Patch,
   Param,
   Delete,
-  UseGuards,
+  // UseGuards,
 } from '@nestjs/common';
 import { BookService } from './book.service';
 import { CreateBookDto } from '../../dto/create-book.dto';
 import { UpdateBookDto } from '../../dto/update-book.dto';
-import { GooglePassportGuard } from '../../guards/google.passport.guard';
+// import { GooglePassportGuard } from '../../guards/google.passport.guard';
 
 @Controller('book')
 export class BookController {
@@ -23,7 +23,7 @@ export class BookController {
   }
 
   @Get()
-  @UseGuards(GooglePassportGuard)
+  // @UseGuards(GooglePassportGuard)
   findAll() {
     return this.bookService.findAll();
   }

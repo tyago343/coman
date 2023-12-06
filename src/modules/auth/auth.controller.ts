@@ -29,7 +29,6 @@ export class AuthController {
     });
 
     return res.status(HttpStatus.OK).json({
-      message: 'Authentication successful',
       user: { ...req.user, token },
     });
   }
