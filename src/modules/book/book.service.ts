@@ -3,9 +3,10 @@ import { CreateBookDto } from '../../dto/create-book.dto';
 import { UpdateBookDto } from '../../dto/update-book.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Book } from '../../entities/Book.entity';
-import { Repository } from 'typeorm';
+import { Between, Like, Not, Repository } from 'typeorm';
 import { Author } from '../../entities/Author.entity';
 import { UploadService } from '../upload/upload.service';
+import { SearchBookDto } from '../../dto/search-book.dto';
 
 @Injectable()
 export class BookService {
@@ -59,6 +60,28 @@ export class BookService {
       where: { id },
       relations: { author: true },
     });
+  }
+  async search(params: SearchBookDto): Promise<Book[]> {
+    let { minPrice, maxPrice } = params;
+    const { title, frontPage, publishedDate, author } = params;
+    const authorToNumber = author ? +author : 0;
+    minPrice = minPrice ? +minPrice : 0;
+    maxPrice = maxPrice ? +maxPrice : 999999;
+    const books = await this.bookRepository.find({
+      where: {
+        ...(title && { title: Like(`%${title}%`) }),
+        ...(publishedDate && { publishedDate: Like(`%${publishedDate}%`) }),
+        price: Between(minPrice, maxPrice),
+        ...(frontPage && { frontPage: Not('') }),
+        ...(author && {
+          author: {
+            id: +authorToNumber,
+          },
+        }),
+      },
+      relations: { author: true },
+    });
+    return books;
   }
 
   async update(id: string, updateBookDto: UpdateBookDto) {
