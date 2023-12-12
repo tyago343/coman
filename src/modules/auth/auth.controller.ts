@@ -1,11 +1,4 @@
-import {
-  Controller,
-  Get,
-  HttpStatus,
-  Req,
-  Res,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
 import { GooglePassportGuard } from '../../guards/google.passport.guard';
 import { AuthService } from './auth.service';
 import { Request, Response } from 'express';
@@ -28,8 +21,6 @@ export class AuthController {
       secure: false,
     });
 
-    return res.status(HttpStatus.OK).json({
-      user: { ...req.user, token },
-    });
+    return res.redirect(`http://localhost:40757`);
   }
 }

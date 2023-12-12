@@ -6,16 +6,19 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { AuthorService } from './author.service';
 import { CreateAuthorDto } from '../../dto/create-author.dto';
 import { UpdateAuthorDto } from '../../dto/update-author.dto';
+import { JwtAuthGuard } from '../../guards/jwt.passport.guard';
 
 @Controller('author')
 export class AuthorController {
   constructor(private readonly authorService: AuthorService) {}
 
   @Post()
+  @UseGuards(JwtAuthGuard)
   create(@Body() createAuthorDto: CreateAuthorDto) {
     return this.authorService.create(createAuthorDto);
   }

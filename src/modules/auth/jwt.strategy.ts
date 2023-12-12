@@ -9,7 +9,7 @@ import { ConfigService } from '@nestjs/config';
 
 export type JwtPayload = {
   sub: string;
-  email: string;
+  username: string;
 };
 
 @Injectable()
@@ -25,6 +25,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
       }
       return token || ExtractJwt.fromAuthHeaderAsBearerToken()(req);
     };
+
     super({
       ignoreExpiration: false,
       secretOrKey: configService.get('JWT_SECRET'),
@@ -36,12 +37,10 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     const user = await this.userRepository.findOne({
       where: { id: +payload.sub },
     });
-
     if (!user) throw new UnauthorizedException('Please log in to continue');
-
     return {
       id: payload.sub,
-      email: payload.email,
+      username: payload.username,
     };
   }
 }

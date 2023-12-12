@@ -25,9 +25,9 @@ export class AuthService {
   async findUser(id: number): Promise<User | null> {
     return await this.userRepository.findOneBy({ id });
   }
-  async generateJwt(payload: any) {
+  generateJwt(payload: any) {
     try {
-      const token = await this.jwtService.sign(payload, {
+      const token = this.jwtService.sign(payload, {
         secret: process.env.JWT_SECRET,
       });
       return token;
@@ -37,7 +37,7 @@ export class AuthService {
   }
   async signIn(user: any) {
     const payload = { username: user.username, sub: user.id };
-    return await this.generateJwt(payload);
+    return this.generateJwt(payload);
   }
   async registerUser(CreateUserDto: CreateUserDto) {
     try {
